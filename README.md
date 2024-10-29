@@ -12,7 +12,7 @@ https://huggingface.co/Naozumi0512/G2pW-Cantonese
 ```bash
 git clone https://github.com/Naozumi520/G2pW-Cantonese && cd G2pW-Cantonese
 git clone https://huggingface.co/hon9kon9ize/bert-large-cantonese
-git clone https://huggingface.co/Naozumi0512/g2pW-Cantonese
+git clone https://huggingface.co/Naozumi0512/g2pW-Cantonese G2pWModel-v2-onnx
 pip install -r requirements.txt
 ```
 ```python
