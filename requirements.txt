@@ -1,0 +1,8 @@
+numpy
+torch
+onnxruntime
+tqdm
+transformers
+pandas
+pytest
+pytest-cov
