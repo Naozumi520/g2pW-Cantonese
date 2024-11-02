@@ -1,4 +1,5 @@
 import os
+import sys
 import json
 import requests
 import zipfile
@@ -45,14 +46,14 @@ def predict(onnx_session, dataloader, labels, turnoff_tqdm=False):
 
 
 class G2PWConverter:
-    def __init__(self, model_dir='G2PWModel/', model_source=None, num_workers=None, batch_size=None,
-                 turnoff_tqdm=True):
+    def __init__(self, model_dir='G2PWModel/', model_source=None, num_workers=None, batch_size=None, 
+                 use_cuda=False, turnoff_tqdm=True):
 
         sess_options = onnxruntime.SessionOptions()
         sess_options.graph_optimization_level = onnxruntime.GraphOptimizationLevel.ORT_ENABLE_ALL
         sess_options.execution_mode = onnxruntime.ExecutionMode.ORT_SEQUENTIAL
         sess_options.intra_op_num_threads = 2
-        self.session_g2pw = onnxruntime.InferenceSession(os.path.join(model_dir, 'g2pw.onnx'), sess_options=sess_options)
+        self.session_g2pw = onnxruntime.InferenceSession(os.path.join(model_dir, 'g2pw.onnx'), sess_options=sess_options, providers=['CUDAExecutionProvider' if use_cuda else 'CPUExecutionProvider'])
         
         self.config = load_config(os.path.join(model_dir, 'config.py'), use_default=True)
 
@@ -65,8 +66,8 @@ class G2PWConverter:
 
         polyphonic_chars_path = os.path.join(model_dir, 'POLYPHONIC_CHARS.txt')
         monophonic_chars_path = os.path.join(model_dir, 'MONOPHONIC_CHARS.txt')
-        self.polyphonic_chars = [line.split('\t') for line in open(polyphonic_chars_path).read().strip().split('\n')]
-        self.monophonic_chars = [line.split('\t') for line in open(monophonic_chars_path).read().strip().split('\n')]
+        self.polyphonic_chars = [line.split('\t') for line in open(polyphonic_chars_path, encoding='utf-8').read().strip().split('\n')]
+        self.monophonic_chars = [line.split('\t') for line in open(monophonic_chars_path, encoding='utf-8').read().strip().split('\n')]
         self.labels, self.char2phonemes = get_phoneme_labels(self.polyphonic_chars)
 
         self.chars = sorted(list(self.char2phonemes.keys()))
@@ -89,7 +90,8 @@ class G2PWConverter:
             dataset=dataset,
             batch_size=self.batch_size,
             collate_fn=dataset.create_mini_batch,
-            num_workers=self.num_workers
+            # num_workers=self.num_workers
+            num_workers=0 # https://github.com/pytorch/pytorch/issues/12831
         )
 
         preds, confidences = predict(self.session_g2pw, dataloader, self.labels, turnoff_tqdm=self.turnoff_tqdm)

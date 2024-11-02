@@ -18,7 +18,7 @@ pip install -r requirements.txt
 ```python
 from g2pw import G2PWConverter
 
-conv = G2PWConverter(model_dir='./G2PWModel-v2-onnx/', model_source='./bert-large-cantonese/')
+conv = G2PWConverter(model_dir='./G2PWModel-v2-onnx/', model_source='./bert-large-cantonese/', use_cuda=True)
 # "校":
 sentence = '調校溫度'
 print(conv(sentence)) # [['tiu4', 'gaau3', 'wan1', 'dou6']]
