@@ -1,1 +1,1 @@
-from .api import G2PWConverter
+from g2pw.api import G2PWConverter

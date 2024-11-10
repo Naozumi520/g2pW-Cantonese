@@ -1,25 +1,28 @@
-# Copyright (c) 2022 PaddlePaddle Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-"""
-Credits
-    This code is modified from https://github.com/GitYCC/g2pW
-"""
-import os
 import re
+import logging
+import sys
 
 
-def wordize_and_map(text: str):
+class RunningAverage:
+    def __init__(self):
+        self.values = []
+
+    def add(self, val):
+        self.values.append(val)
+
+    def add_all(self, vals):
+        self.values += vals
+
+    def get(self):
+        if len(self.values) == 0:
+            return None
+        return sum(self.values) / len(self.values)
+
+    def flush(self):
+        self.values = []
+
+
+def wordize_and_map(text):
     words = []
     index_map_from_text_to_word = []
     index_map_from_word_to_text = []
@@ -55,8 +58,8 @@ def wordize_and_map(text: str):
     return words, index_map_from_text_to_word, index_map_from_word_to_text
 
 
-def tokenize_and_map(tokenizer, text: str):
-    words, text2word, word2text = wordize_and_map(text=text)
+def tokenize_and_map(tokenizer, text):
+    words, text2word, word2text = wordize_and_map(text)
 
     tokens = []
     index_map_from_token_to_text = []
@@ -83,7 +86,7 @@ def tokenize_and_map(tokenizer, text: str):
     return tokens, index_map_from_text_to_token, index_map_from_token_to_text
 
 
-def _load_config(config_path: os.PathLike):
+def _load_config(config_path):
     import importlib.util
     spec = importlib.util.spec_from_file_location('__init__', config_path)
     config = importlib.util.module_from_spec(spec)
@@ -105,6 +108,7 @@ default_config_dict = {
         'char-linear': True,
         'pos-linear': False,
         'char+pos-second': True,
+
         'char+pos-second_lowrank': False,
         'lowrank_size': 0,
         'char+pos-second_fm': False,
@@ -131,7 +135,7 @@ default_config_dict = {
 }
 
 
-def load_config(config_path: os.PathLike, use_default: bool=False):
+def load_config(config_path, use_default=False):
     config = _load_config(config_path)
     if use_default:
         for attr, val in default_config_dict.items():
@@ -143,3 +147,15 @@ def load_config(config_path: os.PathLike, use_default: bool=False):
                     if dict_k not in d:
                         d[dict_k] = dict_v
     return config
+
+
+def get_logger(file_path):
+    logger = logging.getLogger()
+    logger.setLevel(logging.DEBUG)
+
+    output_file_handler = logging.FileHandler(file_path)
+    stdout_handler = logging.StreamHandler(sys.stdout)
+
+    logger.addHandler(output_file_handler)
+    logger.addHandler(stdout_handler)
+    return logger
