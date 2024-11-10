@@ -1,3 +1,6 @@
+import sys
+sys.path.insert(0, './')
+
 import os
 import argparse
 
@@ -5,9 +8,9 @@ import torch
 from torch.utils.data import DataLoader
 from transformers import BertTokenizer
 
-from old_g2pw.dataset import prepare_data, TextDataset, get_phoneme_labels, get_char_phoneme_labels
-from old_g2pw.module import G2PW
-from old_g2pw.utils import load_config
+from g2pw.dataset import prepare_data, TextDataset, get_phoneme_labels, get_char_phoneme_labels
+from g2pw.module import G2PW
+from g2pw.utils import load_config
 from train_g2p_bert import test
 
 

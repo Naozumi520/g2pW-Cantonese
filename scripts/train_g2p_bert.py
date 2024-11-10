@@ -1,3 +1,6 @@
+import sys
+sys.path.insert(0, './')
+
 import os
 import argparse
 from datetime import datetime
@@ -14,9 +17,9 @@ from tqdm import tqdm
 import numpy as np
 from transformers import BertTokenizer
 
-from old_g2pw.dataset import prepare_data, prepare_pos, TextDataset, get_phoneme_labels, get_char_phoneme_labels
-from old_g2pw.module import G2PW
-from old_g2pw.utils import load_config, RunningAverage, get_logger
+from g2pw.dataset import prepare_data, prepare_pos, TextDataset, get_phoneme_labels, get_char_phoneme_labels
+from g2pw.module import G2PW
+from g2pw.utils import load_config, RunningAverage, get_logger
 
 
 def train_batch(model, data, optimizer, device):
@@ -104,7 +107,7 @@ def test(config, checkpoint, device, sent_path=None, lb_path=None, pos_path=None
 
     tokenizer = BertTokenizer.from_pretrained(config.model_source)
 
-    polyphonic_chars = [line.split('\t') for line in open(config.polyphonic_chars_path, encoding="utf-8").read().strip().split('\n')]
+    polyphonic_chars = [line.split('\t') for line in open(config.polyphonic_chars_path).read().strip().split('\n')]
     labels, char2phonemes = get_char_phoneme_labels(polyphonic_chars) if config.use_char_phoneme else get_phoneme_labels(polyphonic_chars)
     chars = sorted(list(char2phonemes.keys()))
 
@@ -163,7 +166,7 @@ def main(config_path):
 
     tokenizer = BertTokenizer.from_pretrained(config.model_source)
 
-    polyphonic_chars = [line.split('\t') for line in open(config.polyphonic_chars_path, encoding="utf-8").read().strip().split('\n')]
+    polyphonic_chars = [line.split('\t') for line in open(config.polyphonic_chars_path).read().strip().split('\n')]
     labels, char2phonemes = get_char_phoneme_labels(polyphonic_chars) if config.use_char_phoneme else get_phoneme_labels(polyphonic_chars)
     chars = sorted(list(char2phonemes.keys()))
 
