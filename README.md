@@ -6,13 +6,13 @@ This is a Cantonese adaptation of the g2pW repository, designed for polyphone di
 
 ## Model
 The trained model is available at:  
-https://huggingface.co/Naozumi0512/g2pW-Cantonese
+https://huggingface.co/Naozumi0512/g2pW-canto-20241029-bert-large
 
 ## Usage
 ```bash
 git clone https://github.com/Naozumi520/g2pW-Cantonese && cd g2pW-Cantonese
 git clone https://huggingface.co/hon9kon9ize/bert-large-cantonese
-git clone https://huggingface.co/Naozumi0512/g2pW-Cantonese G2PWModel-v2-onnx
+git clone https://huggingface.co/Naozumi0512/g2pW-canto-20241029-bert-large G2PWModel-v2-onnx
 pip install -r requirements.txt
 ```
 ```python
