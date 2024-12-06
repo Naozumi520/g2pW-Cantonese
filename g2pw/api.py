@@ -83,7 +83,7 @@ class G2PWConverter:
             return partial_results
 
         dataset = TextDataset(self.tokenizer, self.labels, self.char2phonemes, self.chars, texts, query_ids,
-                              use_mask=self.config.use_mask, use_char_phoneme=False,
+                              use_mask=self.config.use_mask,
                               window_size=self.config.window_size, for_train=False)
 
         dataloader = DataLoader(

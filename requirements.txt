@@ -4,5 +4,6 @@ onnxruntime
 tqdm
 transformers
 pandas
+pycantonese
 pytest
 pytest-cov

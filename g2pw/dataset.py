@@ -43,10 +43,11 @@ def prepare_pos(pos_path):
 
 
 class TextDataset(Dataset):
-    POS_TAGS = ['UNK', 'A', 'C', 'D', 'I', 'N', 'P', 'T', 'V', 'DE', 'SHI']
+    # POS_TAGS = ['UNK', 'A', 'C', 'D', 'I', 'N', 'P', 'T', 'V', 'DE', 'SHI']
+    POS_TAGS = ['UNK', 'ADJ', 'ADP', 'ADV', 'AUX', 'C', 'D', 'I', 'N', 'NUM', 'PT', 'PN', 'PPN', 'PU', 'SC', 'V', 'X']
 
     def __init__(self, tokenizer, labels, char2phonemes, chars, texts, query_ids, phonemes=None, pos_tags=None,
-                 use_mask=False, use_char_phoneme=False, use_pos=False, window_size=None, max_len=512, for_train=True):
+                 use_mask=False, use_pos=False, window_size=None, max_len=512, for_train=True):
         self.tokenizer = tokenizer
         self.max_len = max_len
         self.window_size = window_size
@@ -61,7 +62,6 @@ class TextDataset(Dataset):
         self.pos_tags = pos_tags
 
         self.use_mask = use_mask
-        self.use_char_phoneme = use_char_phoneme
         self.use_pos = use_pos
 
         if window_size is not None:
@@ -148,7 +148,7 @@ class TextDataset(Dataset):
 
         if self.for_train:
             phoneme = self.phonemes[idx]
-            label_id = self.labels.index(f'{query_char} {phoneme}' if self.use_char_phoneme else phoneme)
+            label_id = self.labels.index(phoneme)
             outputs['label_id'] = label_id
 
         info = {

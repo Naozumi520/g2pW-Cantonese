@@ -18,7 +18,7 @@ def convert_to_onnx(model_dir, save_onnx_path):
 
     polyphonic_chars_path = os.path.join(model_dir, 'POLYPHONIC_CHARS.txt')
     polyphonic_chars = [line.split('\t') for line in open(polyphonic_chars_path).read().strip().split('\n')]
-    labels, char2phonemes = get_char_phoneme_labels(polyphonic_chars) if config.use_char_phoneme else get_phoneme_labels(polyphonic_chars)
+    labels, char2phonemes = get_phoneme_labels(polyphonic_chars)
 
     chars = sorted(list(char2phonemes.keys()))
     pos_tags = TextDataset.POS_TAGS
@@ -47,7 +47,7 @@ def convert_to_onnx(model_dir, save_onnx_path):
     query_ids = [0]
 
     dataset = TextDataset(tokenizer, labels, char2phonemes, chars, texts, query_ids,
-        use_mask=config.use_mask, use_char_phoneme=config.use_char_phoneme,
+        use_mask=config.use_mask,
         window_size=config.window_size, for_train=False)
 
     dataloader = DataLoader(

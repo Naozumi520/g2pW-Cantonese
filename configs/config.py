@@ -1,4 +1,3 @@
-# root = './20241128-rimePure-zjyg/'
 root = './rimeExtract_dataset/'
 
 manual_seed = 1313
@@ -16,7 +15,7 @@ param_conditional = {
 }
 
 # for training
-exp_name = '20241201_BERT_B_DescWS-Sec-cLin-B_POSw01'
+exp_name = '20241206_BERT_B_DescWS-Sec-cLin-B_POS_hkcancor_w03'
 train_sent_path = root + 'train.sent'
 train_lb_path = root + 'train.lb'
 valid_sent_path = root + 'dev.sent'
@@ -29,9 +28,12 @@ val_interval = 200
 num_iter = 13000
 use_pos = True
 param_pos = {
-    'weight': 0.1,
+    'weight': 0.3,
     'pos_joint_training': True,
-    'train_pos_path': root + 'train.pos',
-    'valid_pos_path': root + 'dev.pos',
-    'test_pos_path': root + 'test.pos'
+    # 'train_pos_path': root + 'train.pos',
+    # 'valid_pos_path': root + 'dev.pos',
+    # 'test_pos_path': root + 'test.pos',
+    'train_pos_path': root + 'train_hkcancor.pos',
+    'valid_pos_path': root + 'dev_hkcancor.pos',
+    'test_pos_path': root + 'test_hkcancor.pos',
 }

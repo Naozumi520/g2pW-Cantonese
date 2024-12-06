@@ -23,14 +23,14 @@ def main(config, checkpoint, sent_path, output_path=None):
     tokenizer = BertTokenizer.from_pretrained(config.model_source)
 
     polyphonic_chars = [line.split('\t') for line in open(config.polyphonic_chars_path).read().strip().split('\n')]
-    labels, char2phonemes = get_char_phoneme_labels(polyphonic_chars) if config.use_char_phoneme else get_phoneme_labels(polyphonic_chars)
+    labels, char2phonemes = get_phoneme_labels(polyphonic_chars)
 
     chars = sorted(list(char2phonemes.keys()))
 
     texts, query_ids = prepare_data(sent_path)
 
     dataset = TextDataset(tokenizer, labels, char2phonemes, chars, texts, query_ids,
-                          use_mask=config.use_mask, use_char_phoneme=config.use_char_phoneme, window_size=config.window_size, for_train=False)
+                          use_mask=config.use_mask, window_size=config.window_size, for_train=False)
 
     dataloader = DataLoader(
         dataset=dataset,
@@ -56,8 +56,6 @@ def main(config, checkpoint, sent_path, output_path=None):
     model.eval()
 
     preds, confidences = predict(model, dataloader, device, labels)
-    if config.use_char_phoneme:
-        preds = [pred.split(' ')[1] for pred in preds]
 
     for text, query_id, pred, confidence in zip(texts, query_ids, preds, confidences):
         print('{font}{anchor}{mid}{anchor}{end},{pred},{confidence:.5}'.format(

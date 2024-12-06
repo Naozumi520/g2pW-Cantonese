@@ -20,7 +20,7 @@ def main(config, test_sent_path, test_lb_path, test_pos_path, checkpoint_path):
     test_metric = test(config, checkpoint_path, device, sent_path=test_sent_path, lb_path=test_lb_path, pos_path=test_pos_path)
 
     test_pos_acc = 'none' if test_metric['pos_acc'] is None else test_metric['pos_acc']
-    print(f'test_loss={test_metric["avg_loss"]:.6} test_pos_acc={test_pos_acc:.6} test_acc={test_metric["acc"]:.6} / {test_metric["avg_acc_by_char"]:.6} / {test_metric["avg_acc_by_char_bopomofo"]:.6}')
+    print(f'test_loss={test_metric["avg_loss"]:.6} test_pos_acc={test_pos_acc:.6} test_acc={test_metric["acc"]:.6} / {test_metric["avg_acc_by_char"]:.6}')
 
 
 if __name__ == '__main__':

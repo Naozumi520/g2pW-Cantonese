@@ -100,7 +100,6 @@ default_config_dict = {
     'window_size': 32,
     'num_workers': 2,
     'use_mask': True,
-    'use_char_phoneme': False,
     'use_conditional': True,
     'param_conditional': {
         'affect_location': 'softmax',
