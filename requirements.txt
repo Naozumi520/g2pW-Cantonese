@@ -1,6 +1,6 @@
 numpy
 torch
-onnxruntime
+onnxruntime-gpu==1.19.2
 tqdm
 transformers
 pandas
